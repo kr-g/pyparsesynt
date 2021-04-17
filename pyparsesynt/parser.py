@@ -1,0 +1,168 @@
+from pyparsesynt.token import Token, TokenStream, BackPos
+from pyparsesynt.rule import (
+    Production,
+    Call,
+    Terminal,
+    And,
+    Or,
+    Not,
+    Optional,
+    Repeat,
+)
+from .repr import ReprBase
+from .syn import Element
+
+
+class LexerTokens(object):
+    def __init__(self, tok):
+        self.tok = tok
+        self.__dict__.update(zip(tok.map.keys(), tok.map.keys()))
+
+
+class ParserCallback(ReprBase):
+    def __init__(self):
+        self.pref = "prod_"
+        self._reset()
+
+    def _reset(self):
+        self.last = None
+        self.elem = None
+
+    def invoke(self, prod, last):
+
+        self.last = last
+        self.elem = Element()
+
+        basenam = prod.alias if prod.alias else prod.name
+        fullnam = self.pref + basenam
+        base = self.__class__.__dict__
+
+        if fullnam in base:
+            base[fullnam](
+                self,
+            )
+        else:
+            print(self.elem)
+            self.elem.head(basenam)
+            self.coll()
+            # print("invoked default", self.elem)
+
+        if len(self.elem) > 0:
+            return self.elem
+
+    def tokens(self):
+        return self.last.capture()
+
+    def coll(self):
+        self.elem.add(list(self.tokens()))
+
+    def col(self):
+        for t in self.tokens():
+            self.elem.add(t)
+
+    def h(self, val):
+        self.elem.head(val)
+
+    def rtokens(self, val):
+        return list(reversed(self.tokens()))
+
+
+class Parser(ReprBase):
+    def __init__(self, debug=False):
+        self._debug = debug
+        self.rules = {}
+        self.ts = None
+        self.callb = None
+        self.root = Element()
+
+    def __repr__(self):
+        res = ""
+        for prod, rules in self.rules.items():
+            res += "".join([prod + " ::=\t" + str(i.mat) for i in rules])
+            res += "\n\r"
+        return res
+
+    def extend(self, prods):
+        for p in prods:
+            self.append(p)
+
+    def append(self, prod):
+        prod.parser = self
+        prod_alt = self.rules.setdefault(prod.name, [])
+        prod_alt.append(prod)
+
+    def Production(self, name, mat, alias=None, auto_add=True):
+        prod = Production(name, mat, parser=self, alias=alias)
+        if auto_add == True:
+            self.append(prod)
+        return prod
+
+    def Call(self, target):
+        return Call(target, parser=self)
+
+    def set_input(self, tokens):
+        tokens = list(tokens)
+        self.ts = TokenStream(tokens)
+
+    def set_callback(self, callb):
+        self.callb = callb
+
+    def _get_subset(self, tar):
+        return self.rules.get(tar)
+
+    def _run_valid(self, tar, it, root):
+        prod_alt = self._get_subset(tar)
+        found_alt = self._run_set(tar, prod_alt, self.ts)
+        return self._run_invoke(found_alt, root=root)
+
+    def _run_set(self, tar, subset, it):
+        found = []
+        pos = BackPos(it)
+        for alt in subset:
+            rc = alt.valid(it)
+            if rc:
+                found.append((alt, BackPos(it), alt.elem))
+            pos.revert()
+        return found
+
+    def _run_invoke(self, found, root):
+
+        if len(found) > 0:
+            fp = max(found, key=lambda x: x[1])
+            prod, pos, elem = fp
+            pos.revert()
+            # elem = self._invoke_resolve(prod, lastpos)
+            if root != None:
+                if elem != None:
+                    root.add(elem)
+            return True, fp
+
+    def run(self):
+        root = Element("---root---")
+        while len(self.ts) > 0:
+            last = BackPos(self.ts)
+            found = []
+            self._debug and print("---round start", self.ts.peek())
+            for tar in self.rules.keys():
+                elem = Element()
+                rc = self._run_valid(tar, self.ts, root=elem)
+                if rc:
+                    _, (prod, pos, elem) = rc
+                    found.append((prod, pos, elem))
+                last.revert()
+
+            self._debug and print("---round result", self.ts.peek())
+            if len(found) == 0:
+                raise Exception("no solution found")
+
+            self._debug and print(found)
+
+            fp = max(found, key=lambda x: x[1])
+            prod, pos, elem = fp
+            root.add(elem)
+            pos.revert()
+
+            self._debug and print("---round done")
+            self._debug and print()
+
+        return root
