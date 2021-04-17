@@ -26,7 +26,7 @@ alltokens = Tokens().extend(tokens)
 lexx = Lexer(alltokens, debug=not True, debugtime=True)
 
 
-inp_text = """1 0 - + 7 seven - 1 4 + 5 + 6 six"""
+inp_text = """1 0 - + 7 8 seven - 1 4 + 5 + 6 six"""
 # inp_text = """+ 1 0 - + 7 seven """
 
 stream = lexx.tokenize(inp_text)
@@ -47,7 +47,9 @@ p_zahl_ohne_null_5 = pars.Production(
 )
 
 p_zahl_ohne_null_10 = pars.Production(
-    "zahl_ohne_null", Or([Terminal(str(x)) for x in range(5, 10)]), alias="higher_5"
+    "zahl_ohne_null",
+    Or([Terminal(str(x)) for x in range(5, 10)]),
+    alias="higher_or_equal_5",
 )
 
 p_zahl = pars.Production(
@@ -85,7 +87,7 @@ p_number_word = pars.Production(
     And(
         [
             Optional(Or([Terminal(typ=lxtok.PLUS), Terminal(typ=lxtok.MINUS)])),
-            Repeat(pars.Call("zahl_ohne_null"), min_val=1),
+            Repeat(pars.Call("zahl_ohne_null"), min_val=1, name="innere_zahl"),
             # pars.Call("zahl_ohne_null"),
             Terminal(typ=lxtok.WORD),
             # pars.Call("int")

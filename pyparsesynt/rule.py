@@ -82,12 +82,8 @@ class Production(Match):
         return self.mat.valid(it)
 
     def build_from(self, last_it):
-        if self.mat.elem:
-            if self.mat.elem._head:
-                self.elem.add(self.mat.elem)
-            else:
-                self.elem = self.mat.elem
-            self.elem.head(self.alias if self.alias else self.name)
+        self.elem = self.mat.elem
+        self.elem.head(self.alias if self.alias else self.name)
         return self.elem
 
     def __repr__(self):
@@ -114,17 +110,7 @@ class Call(Match):
             if cnt >= 1:
                 raise Exception("recursion", cnt)
 
-        lastpos = BackPos(it)
-
-        # self.elem.head("call")
-        # self.elem.add(che:=Element())
-
-        # print(">>>CALL",self.prod,self._parent.name)
         rc = self.parser._run_valid(self.prod, it, root=self.elem)
-        # print("<<<CALL",self.prod,self._parent.name)
-
-        self.rc_pars = rc
-
         if rc:
             rc, _ = rc
 
@@ -252,10 +238,11 @@ class Optional(SingleRuleBase):
 
 
 class Repeat(SingleRuleBase):
-    def __init__(self, rule, min_val=0, max_val=None):
+    def __init__(self, rule, min_val=0, max_val=None, name=None):
         super().__init__(rule)
         self._min = min_val
         self._max = max_val
+        self._name = name
 
     def _in_range(self, cnt):
         if cnt >= self._min:
@@ -294,6 +281,8 @@ class Repeat(SingleRuleBase):
 
     def build_from(self, last_it):
         self.elem = self.elem_hier
+        if self._name:
+            self.elem.head(self._name)
 
 
 class Not(SingleRuleBase):

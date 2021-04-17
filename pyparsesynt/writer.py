@@ -30,7 +30,13 @@ class Writer(object):
         ttyp = type(match)
 
         if ttyp == Production:
-            return match.name + " ::= " + self._str_term(match.mat)
+            alias = (
+                (" as " + match.alias)
+                if ("alias" in match.__dict__ and match.alias)
+                else ""
+            )
+
+            return match.name + alias + " ::= " + self._str_term(match.mat)
 
         elif ttyp == Call:
             return match.prod
