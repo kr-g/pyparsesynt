@@ -32,7 +32,7 @@ produces an element in the output list.
 it is possible to have more than one production rule with the same name defined.
 those act then as alternative rule for the production. 
 if required to distinguish between different alternatives it's possible to assign an `alias` to 
-alternative production rules.
+alternative production rules, where the alias is reflected in the output syntax tree.
 
 currently there is no formal grammar like BNF, or EBNF to specify the used grammar.
 instead the grammar is defined by class based rules.
