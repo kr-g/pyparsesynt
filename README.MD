@@ -16,7 +16,7 @@ for latest ongoing, or upcoming news
 
 # how it works 
  
-`pyparsesynt` is a [botton-up parser](https://en.wikipedia.org/wiki/Bottom-up_parsing).
+`pyparsesynt` implements a [botton-up parser](https://en.wikipedia.org/wiki/Bottom-up_parsing).
 
 in principle it is a variant of a 
 [`LR parser`](https://en.wikipedia.org/wiki/LR_parser)
@@ -24,7 +24,7 @@ named also
 [`LALR(1) parser`](https://en.wikipedia.org/wiki/LALR_parser).
 
 the produced syntax tree is somehow inspired by 
-[`lisp`](https://en.wikipedia.org/wiki/Lisp_(programming_language))
+[`lisp`](https://en.wikipedia.org/wiki/Lisp_(programming_language)),
 so the output is a list which elements can contain again list elements (hierarchical list).
 
 each [`production rule`](https://en.wikipedia.org/wiki/Formal_grammar#The_syntax_of_grammars)
@@ -53,13 +53,13 @@ currently the following rules are available:
 
 the syntax tree is not optimized.
 
-in case a infix notation might wants to have sort of
-[`shunting-yard algorithm`](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
+in case a parser for an infix notation might wants to have also sort of
+[`shunting-yard algorithm`](https://en.wikipedia.org/wiki/Shunting-yard_algorithm).
 
 alternatively think into the direction of 
 [Nikolaus Wirth's](https://en.wikipedia.org/wiki/Niklaus_Wirth)
-proposal 
-as given in [`EBNF`](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
+proposal - as given here in 
+[`EBNF`](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
 
     E = T | E "+" T.      # expression
     T = F | T "*" F.      # term
