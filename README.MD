@@ -16,7 +16,7 @@ for latest ongoing, or upcoming news
 
 # how it works 
  
-`pyparsesynt` implements a [botton-up parser](https://en.wikipedia.org/wiki/Bottom-up_parsing).
+`pyparsesynt` implements a [`botton-up parser`](https://en.wikipedia.org/wiki/Bottom-up_parsing).
 
 in principle it is a variant of a 
 [`LR parser`](https://en.wikipedia.org/wiki/LR_parser)
