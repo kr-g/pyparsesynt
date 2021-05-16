@@ -83,7 +83,7 @@ refer also to
 # related project 
 
 [`pylexem`](https://github.com/kr-g/pylexem) 
-can beused to create the tokenized tupel input stream.
+can be used to create the tokenized tupel input stream.
 
 
 # Platform
