@@ -50,7 +50,10 @@ class Match(ReprBase):
             elem.head(self.alias if self.alias else self.name)
 
     def _build_from_tail(self, elem, last_it):
-        elem.add(last_it.capture())
+        val = last_it.capture()
+        if len(val) == 1:
+            val = val[0]
+        elem.add(val)
 
     def parent(self, parent=None):
         self._parent = parent
@@ -236,6 +239,9 @@ class Optional(SingleRuleBase):
             pos.revert()
         return True
 
+    def build_from(self, last_it):
+        self.elem = self.rule.elem
+
 
 class Repeat(SingleRuleBase):
     def __init__(self, rule, min_val=0, max_val=None, name=None):
@@ -281,13 +287,13 @@ class Repeat(SingleRuleBase):
 
     def build_from(self, last_it):
         self.elem = self.elem_hier
+        nam = "*"
         if self._name:
-            self.elem.head(self._name)
+            nam += self._name
         else:
             if type(self.rule) == Call:
-                self.elem.head("*:" + self.rule.prod)
-            else:
-                self.elem.head("*:")
+                nam += self.rule.prod
+        self.elem.head(nam)
 
 
 class Not(SingleRuleBase):

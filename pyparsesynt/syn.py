@@ -18,18 +18,21 @@ class Element(ReprBase):
 
     def __as_str__(self, sub, ident=1):
 
+        CH = "-"
+
         rc = ""
         if sub._head:
-            rc = ("-" if ident == 1 else " ") * (ident - 1) + "-" + sub._head + "\n"
+            rc = (" ") * (ident - 1) + CH + str(sub._head) + "\n"
+
+        offs = 1 if sub._head else 0
 
         for t in sub._tail:
             if t == None or len(t) == 0:
                 continue
             if type(t) == Element:
-                rc += self.__as_str__(t, ident + 1)
+                rc += self.__as_str__(t, ident + offs)
             else:
-                rc += " " * ident + "+" + str(t)
-                rc += "\n"
+                rc += " " * (ident + offs - 1) + CH + str(t) + "\n"
 
         return rc
 
