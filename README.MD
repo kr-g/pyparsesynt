@@ -6,23 +6,12 @@
 
 based on a given grammar a syntax tree is constructed.
 
-the syntax tree is not optimized.
 
-in case a infix notation might wants to have sort of
-[`shunting-yard algorithm`](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
+# What's new ?
 
-alternatively think into the direction of 
-[Nikolaus Wirth's](https://en.wikipedia.org/wiki/Niklaus_Wirth)
-proposal 
-as given in [`EBNF`](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
-
-    E = T | E "+" T.      # expression
-    T = F | T "*" F.      # term
-    F = id | "(" E ")".   # factor
-
-reference: 
-- Nikolaus Wirth, downloadable section "Compiler Construction", 
-   [external link](https://people.inf.ethz.ch/wirth/), Chapter 5
+Check
+[`CHANGELOG`](https://github.com/kr-g/pyparsesynt/blob/main/CHANGELOG.MD)
+for latest ongoing, or upcoming news
 
 
 # how it works 
@@ -55,12 +44,25 @@ currently the following rules are available:
 | Repeat | the rule inside is repeated to match the grammar | 
 
 
+# limitations
 
-# What's new ?
+the syntax tree is not optimized.
 
-Check
-[`CHANGELOG`](https://github.com/kr-g/pyparsesynt/blob/main/CHANGELOG.MD)
-for latest ongoing, or upcoming news
+in case a infix notation might wants to have sort of
+[`shunting-yard algorithm`](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
+
+alternatively think into the direction of 
+[Nikolaus Wirth's](https://en.wikipedia.org/wiki/Niklaus_Wirth)
+proposal 
+as given in [`EBNF`](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
+
+    E = T | E "+" T.      # expression
+    T = F | T "*" F.      # term
+    F = id | "(" E ")".   # factor
+
+reference: 
+- Nikolaus Wirth, downloadable section "Compiler Construction", 
+   [external link](https://people.inf.ethz.ch/wirth/), Chapter 5
 
 
 # how to use
