@@ -38,6 +38,12 @@ class Element(ReprBase):
         self._head = elem
         return self
 
+    def get_head(self):
+        return self._head
+
+    def get_tail(self):
+        return self._tail
+
     def add(self, elem):
         self._tail.append(elem)
         return self

@@ -13,58 +13,14 @@ from .repr import ReprBase
 from .syn import Element
 
 
+class NoSolution(Exception):
+    pass
+
+
 class LexerTokens(object):
     def __init__(self, tok):
         self.tok = tok
         self.__dict__.update(zip(tok.map.keys(), tok.map.keys()))
-
-
-class ParserCallback(ReprBase):
-    def __init__(self):
-        self.pref = "prod_"
-        self._reset()
-
-    def _reset(self):
-        self.last = None
-        self.elem = None
-
-    def invoke(self, prod, last):
-
-        self.last = last
-        self.elem = Element()
-
-        basenam = prod.alias if prod.alias else prod.name
-        fullnam = self.pref + basenam
-        base = self.__class__.__dict__
-
-        if fullnam in base:
-            base[fullnam](
-                self,
-            )
-        else:
-            print(self.elem)
-            self.elem.head(basenam)
-            self.coll()
-            # print("invoked default", self.elem)
-
-        if len(self.elem) > 0:
-            return self.elem
-
-    def tokens(self):
-        return self.last.capture()
-
-    def coll(self):
-        self.elem.add(list(self.tokens()))
-
-    def col(self):
-        for t in self.tokens():
-            self.elem.add(t)
-
-    def h(self, val):
-        self.elem.head(val)
-
-    def rtokens(self, val):
-        return list(reversed(self.tokens()))
 
 
 class Parser(ReprBase):
@@ -72,7 +28,6 @@ class Parser(ReprBase):
         self._debug = debug
         self.rules = {}
         self.ts = None
-        self.callb = None
         self.root = Element()
 
     def __repr__(self):
@@ -103,9 +58,6 @@ class Parser(ReprBase):
     def set_input(self, tokens):
         tokens = list(tokens)
         self.ts = TokenStream(tokens)
-
-    def set_callback(self, callb):
-        self.callb = callb
 
     def _get_subset(self, tar):
         return self.rules.get(tar)
@@ -153,7 +105,7 @@ class Parser(ReprBase):
 
             self._debug and print("---round result", self.ts.peek())
             if len(found) == 0:
-                raise Exception("no solution found")
+                raise NoSolution()
 
             self._debug and print(found)
 

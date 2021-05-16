@@ -14,7 +14,7 @@ from pylexem.lexer import (
 )
 from pylexem.utils import RuleBuilder, Sanitizer
 
-from pyparsesynt.parser import Parser, LexerTokens, ParserCallback
+from pyparsesynt.parser import Parser, LexerTokens
 from pyparsesynt.writer import Writer
 from pyparsesynt.repr import ReprBase
 
@@ -98,41 +98,7 @@ p_number_word = pars.Production(
 )
 
 
-class ParserProduction(ParserCallback):
-    def prod_lower_5(self):
-        print("prod_lower_5 alias for prod_zahl_ohne_null", self.tokens())
-        self.h("prod_lower_5")
-        self.col()
-
-    def prod_zahl_ohne_null(self):
-        print("prod_zahl_ohne_null", self.tokens())
-        self.h("prod_zahl_ohne_null")
-        self.col()
-
-    def prod_zahl(self):
-        print("prod_zahl", self.tokens())
-        self.h("prod_zahl")
-        self.col()
-
-    def prod_int(self):
-        print("prod_int", self.tokens())
-        self.h("prod_int")
-        self.coll()
-
-    def prod_number_word(self):
-        print("prod_number_word", self.tokens())
-        self.h("number_word")
-        self.coll()
-
-    def prod_minus(self):
-        print("prod_int", self.tokens())
-        self.h("prod_minus")
-        self.col()
-
-
 #
-
-pars.callb = ParserProduction()
 
 print()
 Writer().write(pars.rules)

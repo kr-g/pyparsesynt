@@ -10,4 +10,5 @@
 ## backlog
 
 - rework build_from -> Token
+- rework Element __as_str__
 - 
