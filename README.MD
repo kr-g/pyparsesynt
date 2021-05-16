@@ -16,7 +16,12 @@ for latest ongoing, or upcoming news
 
 # how it works 
  
-`pyparsesynt` is a [botton-up parser](https://en.wikipedia.org/wiki/Bottom-up_parsing). 
+`pyparsesynt` is a [botton-up parser](https://en.wikipedia.org/wiki/Bottom-up_parsing).
+
+in principle it is a variant of a 
+[`LR parser`](https://en.wikipedia.org/wiki/LR_parser)
+named also
+[`LALR(1) parser`](https://en.wikipedia.org/wiki/LALR_parser).
 
 the produced syntax tree is somehow inspired by 
 [`lisp`](https://en.wikipedia.org/wiki/Lisp_(programming_language))
