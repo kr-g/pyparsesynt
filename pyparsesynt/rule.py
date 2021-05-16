@@ -283,6 +283,11 @@ class Repeat(SingleRuleBase):
         self.elem = self.elem_hier
         if self._name:
             self.elem.head(self._name)
+        else:
+            if type(self.rule) == Call:
+                self.elem.head("*:" + self.rule.prod)
+            else:
+                self.elem.head("*:")
 
 
 class Not(SingleRuleBase):
