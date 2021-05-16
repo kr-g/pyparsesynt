@@ -23,13 +23,15 @@ from pyparsesynt.rule import Production, Call, Terminal, And, Or, Not, Optional,
 
 tokens = RuleBuilder().add_all().build()
 alltokens = Tokens().extend(tokens)
-lexx = Lexer(alltokens, debug=not True, debugtime=True)
+lexx = Lexer(alltokens, debug=not True, debugtime=False)
 
 
 inp_text = """1 0 - + 7 8 seven - 1 4 + 5 + 6 six"""
 # inp_text = """+ 1 0 - + 7 seven """
 
-stream = lexx.tokenize(inp_text)
+stream = lexx.tokenize(
+    inp_text,
+)
 lxtok = LexerTokens(lexx.tokens)
 
 stream = list(Sanitizer().whitespace(stream, keep=[]))

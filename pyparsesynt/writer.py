@@ -1,3 +1,6 @@
+print("deprecated. EBNF writer will be moved out")
+
+
 import sys
 
 from pyparsesynt.rule import (
