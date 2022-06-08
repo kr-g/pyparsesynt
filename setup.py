@@ -32,7 +32,7 @@ version = find_version(file)
 setuptools.setup(
     name=projectname,
     version=version,
-    author="k.r. goger",
+    author="k. goger",
     author_email=f"k.r.goger+{projectname}@gmail.com",
     description=f"{projectname} - parser for creating syntax tree",
     long_description=long_description,
